@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
-import './static/css/common.css'
 import Item from "./components/Item"
+import "./static/style/base.css"
+import "./static/style/index.css"
 
 
 class App extends Component {
@@ -64,26 +64,19 @@ class App extends Component {
           return <Item key={index} todo={todo} handleRemoveItem={handleRemoveItem} handleSelect={handleSelect}/>
       })
     return (
-      <div className="container">
-        <div className="row">
-        <div className="col-md-6 col-md-offset-3">
-        <h1 style={{fontSize:"100px",color:"#ead7d7",marginBottom:"30px"}} className="text-center">todos</h1>
-          <div>
-              <div>
-                  <input type="text" className="form-control input" value={inputValue} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onChange={handleOnchange}/>
-              </div>
-              <div>
-                  <ul style={{paddingLeft:"30px",paddingTop:"10px"}}>
-                    {Items}
-                  </ul>
-              </div>
-              <div>
-                  底部
-              </div>
-          </div>
-          </div>
+        <div>
+            <header className="header">
+                <h1>todos</h1>
+                <input
+                    type="text"
+                    className="new-todo"
+                    value={inputValue}
+                    onKeyUp={handleKeyUp}
+                    onKeyDown={handleKeyDown}
+                    onChange={handleOnchange}
+                />
+            </header>
         </div>
-      </div>
     );
   }
 }
