@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import './static/css/common.css'
+// import './App.css';
+// import './static/css/common.css'
 import Item from "./components/Item"
 
+import './static/style/base.css'
+import './static/style/index.css'
 
 class App extends Component {
     constructor(props){
@@ -18,6 +19,7 @@ class App extends Component {
         this.handleOnchange=this.handleOnchange.bind(this);
         this.handleRemoveItem=this.handleRemoveItem.bind(this);
         this.handleSelect=this.handleSelect.bind(this);
+        this.handleChangeAll=this.handleChangeAll.bind(this);
     }
     //选中效果
     handleSelect(todo){
@@ -56,34 +58,51 @@ class App extends Component {
             this.setState({todosData,inputValue:""})
         }
     }
+    //选择，取消全部
+    handleChangeAll(e){
+        let {todosData}=this.state;
+        todosData=todosData.map((todo,index)=>{
+            todo.hasCompleted=!todo.hasCompleted;
+            //map 循环遍历后，返回的值；
+            return todo;
+        })
+        this.setState({todosData});
+    }
   render() {
-      let {handleKeyUp,handleKeyDown,handleOnchange,handleRemoveItem,handleSelect}=this
+      let {handleKeyUp,handleKeyDown,handleOnchange,handleRemoveItem,handleSelect,handleChangeAll}=this
       let {inputValue}=this.state
-
-      let Items = this.state.todosData.map((todo, index) => {
+      let items = this.state.todosData.map((todo, index) => {
           return <Item key={index} todo={todo} handleRemoveItem={handleRemoveItem} handleSelect={handleSelect}/>
       })
-    return (
-      <div className="container">
-        <div className="row">
-        <div className="col-md-6 col-md-offset-3">
-        <h1 style={{fontSize:"100px",color:"#ead7d7",marginBottom:"30px"}} className="text-center">todos</h1>
-          <div>
-              <div>
-                  <input type="text" className="form-control input" value={inputValue} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onChange={handleOnchange}/>
-              </div>
-              <div>
-                  <ul style={{paddingLeft:"30px",paddingTop:"10px"}}>
-                    {Items}
-                  </ul>
-              </div>
-              <div>
-                  底部
-              </div>
-          </div>
-          </div>
+      let footer=(
+        <div>
+            <section className="main">
+                <input
+                onChange={handleChangeAll}
+                type="checkbox"
+                className="toggle-all"
+                />
+                <ul className="todo-list">
+                    {items}
+                </ul>
+            </section>
         </div>
-      </div>
+      )
+    return (
+        <div>
+            <header className="header">
+                <h1>todos</h1>
+                <input
+                    value={inputValue}
+                    type="text"
+                    className="new-todo"
+                    onKeyUp={handleKeyUp}
+                    onKeyDown={handleKeyDown}
+                    onChange={handleOnchange}
+                />
+            </header>
+            {footer}
+        </div>
     );
   }
 }
