@@ -1,26 +1,56 @@
 import React, { Component } from 'react';
 
-// <li style={{paddingBottom:"5px"}} className={selectedLi}>
-//     <input type="checkbox" name="" id="" onChange={()=>{handleSelect(todo)}} />
-//     <label style={{width:"80%"}}>{todo.value}</label>
-//     <button onClick={()=>{handleRemoveItem(todo)}}>x</button>
-// </li>
-
 class items extends Component {
   constructor(){
     super()
     this.state={
        value:1,
-       enableEdit:false,
-        editInput:""
+       enableEdit:false,  //item是否可编辑
+       editInput:"",  //input 编辑框内的文字
+       val:""
     }
+    this.handleonDoubleClick=this.handleonDoubleClick.bind(this)
+    this.handleEditOnKeyDown=this.handleEditOnKeyDown.bind(this)
+    this.handleOnChange=this.handleOnChange.bind(this)
+    this.editOnBlur=this.editOnBlur.bind(this)
   }
+    editOnBlur(e){
+      this.setState({enableEdit:false});
+    }
+  //修改编辑框的内容
+    handleOnChange(e){
+      this.setState({editInput:e.target.value});
+    }
+    handleEditOnKeyDown(e){
+        //回车后保存
+        let {handleEdit}=this.props;
+        if(e.keyCode==13){
+            this.setState({enableEdit:false});
+            let {todo}=this.props;
+            let {editInput}=this.state;
+            // 修改todosData中的数据；
+            handleEdit(todo,editInput);
+        }
+    }
+    handleonDoubleClick(){
+      let {todo} =this.props;
+      //setState是一个异步操作，接收两个参数，第一个修改的对象值，第二个回调函数；
+      this.setState({
+          enableEdit:true,
+          editInput:todo.value
+      },()=>{
+          //点击后让input force 自动获取焦点
+          //通过refs获取真实的dom节点；
+          this.refs.editInput.focus();
+      })
+    }
   //通过事件传递参数的方法：onClick={()=>fun1(todo)},而不是 onClick={fun1(todo)}
   render() {
     //获取父组件传递过来的值，通过this.props来接收；
-    let {todo,handleRemoveItem,handleSelect}=this.props;
+    let {todo,handleRemoveItem,handleSelect,handleEdit}=this.props;
     let {enableEdit,editInput}=this.state;
-    let selectedLi=todo.hasCompleted?"selectedLi":"";
+    let {handleonDoubleClick,handleEditOnKeyDown,handleOnChange,editOnBlur}=this;
+    // let selectedLi=todo.hasCompleted?" selectedLi":"";
     let className=todo.hasCompleted?"completed":"";
     className+=enableEdit?' editing':"";
     return (
@@ -32,7 +62,7 @@ class items extends Component {
                 checked={todo.hasCompleted}
                 onChange={()=>{handleSelect(todo)}}
                 />
-                <label style={{width:"80%"}}>{todo.value}</label>
+                <label style={{width:"80%"}} onDoubleClick={handleonDoubleClick}>{todo.value}</label>
                 <button
                 className="destroy"
                 onClick={()=>{handleRemoveItem(todo)}}
@@ -41,6 +71,9 @@ class items extends Component {
               <input
                   ref="editInput"
                   value={editInput}
+                  onBlur={editOnBlur}
+                  onChange={handleOnChange}
+                  onKeyDown={handleEditOnKeyDown}
                   type="text"
                   className="edit"
               />

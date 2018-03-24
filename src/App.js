@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-// import './App.css';
-// import './static/css/common.css'
 import Item from "./components/Item"
-
+import Footer from "./components/Footer"
 import './static/style/base.css'
 import './static/style/index.css'
-
 class App extends Component {
     constructor(props){
         super(props);
@@ -20,10 +17,21 @@ class App extends Component {
         this.handleRemoveItem=this.handleRemoveItem.bind(this);
         this.handleSelect=this.handleSelect.bind(this);
         this.handleChangeAll=this.handleChangeAll.bind(this);
+        this.handleEdit=this.handleEdit.bind(this);
+    }
+    //双击修改事件；
+    handleEdit(todo,value){
+        let {todosData}=this.state;
+        todosData=todosData.map((todo2,index)=>{
+             if(todo2.id===todo.id){
+                 todo2.value=value;
+             }
+             return todo2;
+        })
+        this.setState({todosData})
     }
     //选中效果
     handleSelect(todo){
-        console.log(100);
         let {todosData}=this.state;
         todosData=todosData.filter((todo2)=>{
             if(todo2.id===todo.id){
@@ -61,18 +69,30 @@ class App extends Component {
     //选择，取消全部
     handleChangeAll(e){
         let {todosData}=this.state;
+        //判断是否所有都被选中
+        let isSelected=todosData.every((todo,index)=>{
+               return todo.hasCompleted;
+        })
+        //如果所有被选中，那么全部不选 ；否则全部选中；
         todosData=todosData.map((todo,index)=>{
-            todo.hasCompleted=!todo.hasCompleted;
+            if(isSelected){
+                todo.hasCompleted=false;
+            }
+            else{
+                todo.hasCompleted=true;
+            }
             //map 循环遍历后，返回的值；
             return todo;
         })
         this.setState({todosData});
     }
   render() {
-      let {handleKeyUp,handleKeyDown,handleOnchange,handleRemoveItem,handleSelect,handleChangeAll}=this
+      let {handleKeyUp,handleKeyDown,handleOnchange,handleRemoveItem,handleSelect,handleChangeAll,handleEdit}=this
       let {inputValue}=this.state
       let items = this.state.todosData.map((todo, index) => {
-          return <Item key={index} todo={todo} handleRemoveItem={handleRemoveItem} handleSelect={handleSelect}/>
+          // return <Item key={index} todo={todo} handleRemoveItem={handleRemoveItem} handleSelect={handleSelect}/>
+         //使用es6的结构赋值写法让代码更简洁
+          return <Item key={index}  {...{todo,handleRemoveItem,handleSelect,handleEdit}}/>
       })
       let footer=(
         <div>
@@ -86,10 +106,11 @@ class App extends Component {
                     {items}
                 </ul>
             </section>
+            <Footer/>
         </div>
       )
     return (
-        <div>
+        <div className="todoapp">
             <header className="header">
                 <h1>todos</h1>
                 <input
@@ -106,5 +127,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;
