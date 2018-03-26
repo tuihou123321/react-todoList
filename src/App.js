@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {BrowserRouter as Router,Route,ReactDOM} from "react-router-dom"
 import Item from "./components/Item"
 import Footer from "./components/Footer"
 import './static/style/base.css'
@@ -9,7 +10,9 @@ class App extends Component {
         this.state = {
             todosData:[], //{id,value,hasCompleted}
             inputValue:'11',
-            view:'all' //要显示的视图
+            view:'all', //要显示的视图
+            leftCount:"",
+            url:"/"
         }
         this.handleKeyDown=this.handleKeyDown.bind(this);
         this.handleKeyUp=this.handleKeyUp.bind(this);
@@ -18,6 +21,7 @@ class App extends Component {
         this.handleSelect=this.handleSelect.bind(this);
         this.handleChangeAll=this.handleChangeAll.bind(this);
         this.handleEdit=this.handleEdit.bind(this);
+        this.handleRemoveCompletedItems=this.handleRemoveCompletedItems.bind(this);
     }
     //双击修改事件；
     handleEdit(todo,value){
@@ -86,45 +90,61 @@ class App extends Component {
         })
         this.setState({todosData});
     }
-  render() {
-      let {handleKeyUp,handleKeyDown,handleOnchange,handleRemoveItem,handleSelect,handleChangeAll,handleEdit}=this
-      let {inputValue}=this.state
-      let items = this.state.todosData.map((todo, index) => {
-          // return <Item key={index} todo={todo} handleRemoveItem={handleRemoveItem} handleSelect={handleSelect}/>
-         //使用es6的结构赋值写法让代码更简洁
-          return <Item key={index}  {...{todo,handleRemoveItem,handleSelect,handleEdit}}/>
-      })
-      let footer=(
-        <div>
-            <section className="main">
-                <input
-                onChange={handleChangeAll}
-                type="checkbox"
-                className="toggle-all"
-                />
-                <ul className="todo-list">
-                    {items}
-                </ul>
-            </section>
-            <Footer/>
-        </div>
-      )
-    return (
-        <div className="todoapp">
-            <header className="header">
-                <h1>todos</h1>
-                <input
-                    value={inputValue}
-                    type="text"
-                    className="new-todo"
-                    onKeyUp={handleKeyUp}
-                    onKeyDown={handleKeyDown}
-                    onChange={handleOnchange}
-                />
-            </header>
-            {footer}
-        </div>
-    );
+    //删除已完成的任务
+    handleRemoveCompletedItems(){
+        let todosData=this.state.todosData.filter((todo)=>{
+            return todo.hasCompleted===false;
+        })
+        this.setState({todosData})
+    }
+      render() {
+          let {handleKeyUp,handleKeyDown,handleOnchange,handleRemoveItem,handleSelect,handleChangeAll,handleEdit,handleRemoveCompletedItems}=this
+          let {inputValue,leftCount,url,todosData}=this.state
+          let items = todosData.map((todo, index) => {
+              // return <Item key={index} todo={todo} handleRemoveItem={handleRemoveItem} handleSelect={handleSelect}/>
+             //使用es6的结构赋值写法让代码更简洁
+              return <Item key={index}  {...{todo,handleRemoveItem,handleSelect,handleEdit}}/>
+          })
+          let {location}=this.props;
+          console.log(location);
+
+          let pathname="/";
+          leftCount=todosData.filter((todo,index)=>{
+              return todo.hasCompleted===false;
+          });
+          leftCount=leftCount.length;
+          let footer=(
+            <div>
+                <section className="main">
+                    <input
+                    onChange={handleChangeAll}
+                    type="checkbox"
+                    className="toggle-all"
+                    />
+                    <ul className="todo-list">
+                        {items}
+                    </ul>
+                </section>
+                <Footer {...{leftCount,pathname,handleRemoveCompletedItems}}/>
+            </div>
+          )
+        return (
+            <div className="todoapp">
+                <header className="header">
+                    <h1>todos</h1>
+                    <input
+                        value={inputValue}
+                        type="text"
+                        className="new-todo"
+                        onKeyUp={handleKeyUp}
+                        onKeyDown={handleKeyDown}
+                        onChange={handleOnchange}
+                    />
+                </header>
+                {footer}
+            </div>
+        );
   }
 }
+
 export default App;
