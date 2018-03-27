@@ -9,13 +9,12 @@ class App extends Component {
         super(props);
         this.state = {
             todosData:[], //{id,value,hasCompleted}
-            inputValue:'11',
+            inputValue:'',
             view:'all', //要显示的视图
-            leftCount:"",
-            url:"/"
+            leftCount:""
+
         }
         this.handleKeyDown=this.handleKeyDown.bind(this);
-        this.handleKeyUp=this.handleKeyUp.bind(this);
         this.handleOnchange=this.handleOnchange.bind(this);
         this.handleRemoveItem=this.handleRemoveItem.bind(this);
         this.handleSelect=this.handleSelect.bind(this);
@@ -47,9 +46,6 @@ class App extends Component {
     }
     handleOnchange(e){
         this.setState({inputValue:e.target.value})
-    }
-    handleKeyUp(e){
-        // console.log(e.target.value);
     }
     handleRemoveItem(todo){
         let {todosData}=this.state;
@@ -98,17 +94,34 @@ class App extends Component {
         this.setState({todosData})
     }
       render() {
-          let {handleKeyUp,handleKeyDown,handleOnchange,handleRemoveItem,handleSelect,handleChangeAll,handleEdit,handleRemoveCompletedItems}=this
-          let {inputValue,leftCount,url,todosData}=this.state
-          let items = todosData.map((todo, index) => {
+          let {location:{pathname:url}}=this.props;
+
+          //上面写法等同于
+          // let {location}=this.props;
+          // let url=location.pathname;
+
+          let {handleKeyDown,handleOnchange,handleRemoveItem,handleSelect,handleChangeAll,handleEdit,handleRemoveCompletedItems}=this
+          let {inputValue,leftCount,todosData}=this.state
+
+          //过滤数据
+          let items = todosData.filter((todo, index) => {
+              switch(url){
+                  case "/active":
+                      return !todo.hasCompleted;
+                  case "/completed":
+                      return todo.hasCompleted;
+                  default:
+                      return true;
+              }
+          })
+
+          //绑定事件，传递参数
+          items=items.map((todo,index)=>{
               // return <Item key={index} todo={todo} handleRemoveItem={handleRemoveItem} handleSelect={handleSelect}/>
-             //使用es6的结构赋值写法让代码更简洁
+              //使用es6的结构赋值写法让代码更简洁
               return <Item key={index}  {...{todo,handleRemoveItem,handleSelect,handleEdit}}/>
           })
-          let {location}=this.props;
-          console.log(location);
 
-          let pathname="/";
           leftCount=todosData.filter((todo,index)=>{
               return todo.hasCompleted===false;
           });
@@ -125,7 +138,7 @@ class App extends Component {
                         {items}
                     </ul>
                 </section>
-                <Footer {...{leftCount,pathname,handleRemoveCompletedItems}}/>
+                <Footer {...{leftCount,url,handleRemoveCompletedItems}}/>
             </div>
           )
         return (
@@ -136,7 +149,6 @@ class App extends Component {
                         value={inputValue}
                         type="text"
                         className="new-todo"
-                        onKeyUp={handleKeyUp}
                         onKeyDown={handleKeyDown}
                         onChange={handleOnchange}
                     />
@@ -146,5 +158,12 @@ class App extends Component {
         );
   }
 }
+
+// ReactDOM.render(
+//     <Router>
+//         <Route path="/" component={App}/>
+//     </Router>,
+//     document.getElementById("root")
+// )
 
 export default App;

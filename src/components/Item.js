@@ -1,4 +1,11 @@
 import React, { Component } from 'react';
+import PT from "prop-types"
+
+let propTypes={
+    todo:PT.object,
+    handleRemoveItem:PT.func,
+    handleSelect:PT.func
+}
 
 class items extends Component {
   constructor(){
@@ -47,7 +54,7 @@ class items extends Component {
   //通过事件传递参数的方法：onClick={()=>fun1(todo)},而不是 onClick={fun1(todo)}
   render() {
     //获取父组件传递过来的值，通过this.props来接收；
-    let {todo,handleRemoveItem,handleSelect,handleEdit}=this.props;
+    let {todo,handleRemoveItem,handleSelect}=this.props;
     let {enableEdit,editInput}=this.state;
     let {handleonDoubleClick,handleEditOnKeyDown,handleOnChange,editOnBlur}=this;
     // let selectedLi=todo.hasCompleted?" selectedLi":"";
@@ -83,3 +90,4 @@ class items extends Component {
 }
 
 export default items;
+items.propTypes=propTypes;
