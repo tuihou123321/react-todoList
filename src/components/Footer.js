@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PT from 'prop-types';
+import { Link } from "react-router-dom"
+
+  import PT from 'prop-types'
 
 //对上层组件传递过来的数据类型进行校验,需要安装prop-types 插件，出于性能考虑，只在开发环境运行；
 //常用的数据类型

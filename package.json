@@ -17,5 +17,13 @@
   "devDependencies": {
     "prettier": "2.2.1",
     "prop-types": "^15.6.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
