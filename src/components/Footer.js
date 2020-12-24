@@ -24,7 +24,8 @@ class Footer extends Component {
   }
   render() {
     //对上层组件传递过来的数据要先验证数据类型
-    let { leftCount, url, handleRemoveCompletedItems }=this.props
+    let {leftCount, url,
+      handleRemoveCompletedItems}=this.props
     let clearAllBtn = (
       <button className="clear-completed" onClick={handleRemoveCompletedItems}>
         clear all completed
