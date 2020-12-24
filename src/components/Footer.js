@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from "react-router-dom"
 
 
-  import PT from 'prop-types'
+  import PT from "prop-types"
 
 //对上层组件传递过来的数据类型进行校验,需要安装prop-types 插件，出于性能考虑，只在开发环境运行；
 //常用的数据类型
@@ -10,6 +10,7 @@ import { Link } from "react-router-dom"
 //如果数据类型不是预期的类型，控制台会打印值类型错误信息
 let propTypes = {
   leftCount: PT.number,
+
   url: PT.string,
   handleRemoveCompletedItems: PT.func,
 };
