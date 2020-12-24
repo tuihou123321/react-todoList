@@ -17,8 +17,10 @@ let propTypes = {
 
 class Footer extends Component {
   constructor() {
-    super();
-    this.state = {};
+    super()
+    this.state = {
+
+    }
   }
   render() {
     //对上层组件传递过来的数据要先验证数据类型
