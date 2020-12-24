@@ -22,6 +22,10 @@ yarn-error.log
 components/*/*.js
 components/*/*.jsx
 .gitignore
+screenshots
+public
+.idea
+README.md
 .npmignore
 .prettierignore
 .DS_Store

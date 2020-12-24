@@ -12,16 +12,19 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier": "prettier -c --write '**/*'",
+    "pretty-quick": "pretty-quick"
   },
   "devDependencies": {
     "lint-staged": "^10.5.3",
     "prettier": "2.2.1",
+    "pretty-quick": "^3.1.0",
     "prop-types": "^15.6.1"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "pretty-quick --staged"
     }
   },
   "lint-staged": {
