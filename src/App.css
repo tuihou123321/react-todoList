@@ -1,13 +1,13 @@
-.input{
-  box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+.input {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
   padding: 30px;
   border-top: transparent;
   font-size: 20px;
   outline: none !important;
 }
-input{
-  outline:none !important;
+input {
+  outline: none !important;
 }
-.selectedLi{
+.selectedLi {
   color: #d9d9d9;
 }
